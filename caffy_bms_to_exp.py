@@ -1,5 +1,6 @@
 # https://googology.fandom.com/wiki/User_blog:Ytosk/Algorithm_that_changes_BMS_matrices_into_ordinals_up_to_SRO
 # but better
+# By solarzone#0314 and CatIsFluffy#2906
 #---------------------------------------------------
 # solarzone's ordinal library
 from functools import total_ordering # psi v1.3½ patch 1
