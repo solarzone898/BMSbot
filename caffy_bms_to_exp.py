@@ -3,10 +3,10 @@
 # By solarzone#0314 and CatIsFluffy#2906
 # Supports countable ordinals up to ψ₀(I(1,0))
 # Important: I_x+y is assumed to be {x,y}
-# Remember that I_x*2 = I_x+I_x = {x,I_x}, I_x*3 = I_x+I_x*2 = {x,I_x*2}, etc.
+# Remember that I_x*(n+1) = I_x+I_x*n = {x,I_x*n}
 #---------------------------------------------------
 # solarzone's ordinal library
-from functools import total_ordering # psi v1.3½ patch ω
+from functools import total_ordering # psi v1.4
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
