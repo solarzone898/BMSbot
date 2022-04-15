@@ -36,7 +36,7 @@ class Ordinal:
  
     def __init__(self, subscript=0, arg=0, exponent=1, copies=1, addend=0):
        
-        '= ϕ(subscript,arg)^exponent*copies+addend'
+        '= φ(subscript,arg)^exponent*copies+addend'
         self.subscript = subscript
         self.arg = arg
         self.exponent = exponent
