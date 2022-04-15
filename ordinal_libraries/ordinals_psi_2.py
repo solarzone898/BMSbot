@@ -1,5 +1,5 @@
 # cringey (according to CatIsFluffy) version of ordinals_psi.py
-from functools import total_ordering # psi v1.3 patch 2
+from functools import total_ordering # psi v1.3½ patch 1
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
