@@ -1,12 +1,15 @@
 # https://googology.fandom.com/wiki/User_blog:Ytosk/Algorithm_that_changes_BMS_matrices_into_ordinals_up_to_SRO
 # but better
 # By solarzone#0314 and CatIsFluffy#2906
+# Supports countable ordinals up to ψ₀(I(1,0))
+# Important: I_x+y is assumed to be {x,y}
 #---------------------------------------------------
 # solarzone's ordinal library
 from functools import total_ordering # psi v1.3½ patch 1
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
+        # = ψ(Isub,sub,arg)*copies+added in 3-argument ψ, or ψ_{Isub,sub}(arg)
         self.Isub=I_subscript
         self.sub=subscript
         self.arg=arg
