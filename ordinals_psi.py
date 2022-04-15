@@ -1,7 +1,10 @@
+# Supports countable ordinals up to ψ₀(I(1,0))
+# Important: I_x+y is assumed to be {x,y}
 from functools import total_ordering # psi v1.3½ patch 1
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
+        # Same as caffy_bms_to_exp.py
         self.Isub=I_subscript
         self.sub=subscript
         self.arg=arg
