@@ -2,6 +2,7 @@ from functools import total_ordering
  
 # derived from https://github.com/ajcr/transfinite/blob/master/transfinite/ordinal.py
 # most of the multiplication and exponentiation code is from https://reinhardt-c.github.io/VebleNum.js/
+# Goes up to Γ₀, for higher ordinals only addition is supported, in ordinals_psi.py
 def is_finite_ordinal(a):
     """
     Return True if n is a finite ordinal (non-negative int).
