@@ -3,13 +3,13 @@
 # By solarzone#0314 and CatIsFluffy#2906
 # Supports countable ordinals up to ψ₀(I(1,0))
 # Important: I_x+y is assumed to be {x,y}
+# Remember that I_x*2 = I_x+I_x = {x,I_x}, I_x*3 = I_x+I_x*2 = {x,I_x*2}, etc.
 #---------------------------------------------------
 # solarzone's ordinal library
-from functools import total_ordering # psi v1.3½ patch 1
+from functools import total_ordering # psi v1.3½ patch ω
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
-        # = ψ(Isub,sub,arg)*copies+added in 3-argument ψ, or ψ_{Isub,sub}(arg)
         self.Isub=I_subscript
         self.sub=subscript
         self.arg=arg
@@ -37,7 +37,7 @@ class Ordinal:
                     else:
                         term = 'I_' + '{' * (self.Isub != w) + str(self.Isub) + '}' * (self.Isub != w)
                 else:
-                    if self.sub>omega(self.Isub,0):
+                    if get_tuple_2(omega(self.Isub,0))<get_tuple_2(self.sub) and (self.Isub,self.sub)>=(0,I):
                         term=f'Ω_{{{str(self.Isub)+","+str(self.sub)}}}'
                     else:
                         term = f'Ω_{{{omega(self.Isub,0)+self.sub}}}'
@@ -123,7 +123,7 @@ class Ordinal:
                 if isinstance(self.sub, int) and self.Isub==0:
                     term= 'ψ' +''.join(['₀₁₂₃₄₅₆₇₈₉'[int(i)] for i in str(self.sub)]) + '(' + str(self.arg) + ')'
                 else:
-                    if self.sub>omega(self.Isub,0) and (self.Isub,self.sub)>=(0,I):
+                    if get_tuple_2(omega(self.Isub,0))<get_tuple_2(self.sub) and (self.Isub,self.sub)>(0,I):
                         term= 'ψ_' +'{' * (omega(self.Isub,0)+self.sub != w) + str(self.Isub)+','+str(self.sub) + '}' * (omega(self.Isub,0)+self.sub != w) + '(' + str(self.arg) + ')'
                     else:
                         term = 'ψ_' + '{' * (omega(self.Isub, 0) + self.sub != w) + str(omega(self.Isub,0)+self.sub)+ '}' * (omega(self.Isub, 0) + self.sub != w) + '(' + str(self.arg) + ')'
@@ -156,7 +156,7 @@ class Ordinal:
                     k.addend=k.addend+self
                 return k
             else:
-                if self.Isub==other.Isub and self.sub==other.sub and self.arg==other.arg:
+                if (self.Isub,self.sub,self.arg)==(other.Isub,other.sub,other.arg):
                     k=self.copy()
                     k.copies+=other.copies
                     k.addend+=other.addend
@@ -209,6 +209,8 @@ def removeaddend1(k):
         return 0
     else:
         return Ordinal(k.Isub, k.sub, k.arg, k.copies) + removeaddend1(k.addend)
+def get_tuple_2(k):
+    x = (k.Isub,k.sub,k.arg) if isinstance(k,Ordinal) else (-1,0,0); return x
 def norm(n):
     try:
         if W > n.arg >= psi(0, W):
