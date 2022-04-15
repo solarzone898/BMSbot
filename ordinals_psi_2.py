@@ -1,3 +1,4 @@
+# cringey (according to CatIsFluffy) version of ordinals_psi.py
 from functools import total_ordering # psi v1.3 patch 2
 @total_ordering
 class Ordinal:
@@ -109,7 +110,7 @@ class Ordinal:
                                 term= f'ω^({psi(0,x)+self.arg.addend})'
         else:
             if self >= psi3(self.Isub, self.sub, psi3(self.Isub, self.sub, 1)):
-                if self.sub<w and self.Isub==0:
+                if self.sub>omega(self.Isub,0) and (self.Isub,self.sub)>=(0,I):
                     term= 'ψ' +''.join(['₀₁₂₃₄₅₆₇₈₉'[int(i)] for i in str(self.sub)]) + '(' + str(self.arg) + ')'
                 else:
                     term= 'ψ_' +'{' * (omega(self.Isub,0)+self.sub != w) + str(omega(self.Isub,0))+('+'+str(self.sub))*(self.sub!=0) + '}' * (omega(self.Isub,0)+self.sub != w) + '(' + str(self.arg) + ')'
