@@ -36,7 +36,7 @@ class Ordinal:
  
     def __init__(self, subscript=0, arg=0, exponent=1, copies=1, addend=0):
        
-        '= φ(subscript,arg)^exponent*copies+addend'
+        '= ϕ(subscript,arg)^exponent*copies+addend'
         self.subscript = subscript
         self.arg = arg
         self.exponent = exponent
@@ -150,7 +150,7 @@ class Ordinal:
         if is_finite_ordinal(other):
             return Ordinal(self.subscript, self.arg,self.exponent, self.copies * other, self.addend)
         if isSum(other):
-            return self * Ordinal(other.sub, other.arg, other.exponent, other.copies, 0) + self * other.addend
+            return self * Ordinal(other.subscript, other.arg, other.exponent, other.copies, 0) + self * other.addend
         if isSum(self):
             if not is_finite_ordinal(other):
                 return Ordinal(self.subscript,self.arg,self.exponent,self.copies,0)*other
@@ -160,7 +160,7 @@ class Ordinal:
             return Ordinal(self.subscript,self.arg,self.exponent,1)*other
         elif isPhi(self):
             if isProd(other):
-                return self * Ordinal(other.sub, other.arg, other.exponent, 1) * other.copies
+                return self * Ordinal(other.subscript, other.arg, other.exponent, 1) * other.copies
             return Ordinal(0,ns(self)+ns(other))
     def __rmul__(self, other):
  
@@ -171,7 +171,7 @@ class Ordinal:
             return 0
         return self
  
-        return Ordinal(self.sub, self.arg, self.exponent, self.copies, other * self.addend)
+        return Ordinal(self.subscript, self.arg, self.exponent, self.copies, other * self.addend)
     def __pow__(self, other):
  
         if not is_ordinal(other):
@@ -179,9 +179,9 @@ class Ordinal:
         if is_finite_ordinal(other):
             return exp(self, other)
         if isSum(other):
-            return self ** Ordinal(other.sub, other.arg, other.exponent, other.copies) * self ** other.addend
+            return self ** Ordinal(other.subscript, other.arg, other.exponent, other.copies) * self ** other.addend
         if isProd(other):
-            return (self ** Ordinal(other.sub, other.arg, other.exponent)) ** other.copies
+            return (self ** Ordinal(other.subscript, other.arg, other.exponent)) ** other.copies
         if isSum(self):
             return Ordinal(self.subscript, self.arg,self.exponent, self.copies)**other
         if isProd(self):
@@ -259,7 +259,7 @@ def as_latex(a):
  
         return term
 def ns(a):
-    if a.sub==0:
+    if a.subscript==0:
         return a.exponent
     else:
         return a
