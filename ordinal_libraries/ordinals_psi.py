@@ -1,7 +1,7 @@
 # Supports countable ordinals up to ψ₀(I(1,0))
 # Important: I_x+y is assumed to be {x,y}
 # I_x*(n+1) = I_x+I_x*n = {x,I_x*n}
-from functools import total_ordering # psi v1.4
+from functools import total_ordering # psi v1.4.1
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
@@ -70,6 +70,7 @@ class Ordinal:
                                     b=a.copy()
                                 except:
                                     b=a
+
                                 if a<W:
                                     if psi(0, Ordinal(self.Isub, self.arg.sub, self.arg.arg, self.arg.copies)) + a > psi(0,Ordinal(self.arg.Isub,self.arg.sub,self.arg.arg,self.arg.copies) + 1):
                                         if self >= psi(0,Ordinal(self.arg.Isub, self.arg.sub, self.arg.arg, self.arg.copies) + psi(1, W)):
@@ -214,6 +215,67 @@ def norm(n):
     except:
         n = n
     return n
+def aslatex(self):
+    if type(self)==int:
+        return str(self)
+    term = ''
+    if self.arg == 0:
+        if self.Isub == 0:
+            if self.sub<I and self.sub < L:
+                term = '\Omega' + ('_{' + aslatex(self.sub) + '}')*(self.Isub>1)
+            else:
+                term = '\Omega' + '_{0,' + aslatex(self.sub) + '}'
+        elif self.Isub > 0:
+            if self.sub == 0:
+                term = 'I' + ('_{'+aslatex(self.Isub) + '}')*(self.Isub>1)
+            else:
+                term = f'\Omega_{{{aslatex(self.Isub) + "," + aslatex(self.sub)}}}'
+    elif self.sub == 0 and self.Isub == 0:
+        if self.arg < W:
+            term = f'\omega^{{{aslatex(self.arg)}}}'
+        else:
+            try:
+                divW(self.arg)
+                if self.arg < psi(1, W):
+                    x = divW(self.arg)  # epsilon index (dividing by Ω)
+                    term = f'\\varepsilon_{{{aslatex(x)}}}'
+                else:
+                    raise Exception('qwertyuiop')
+            except:
+                if self.arg.addend == 0 or self.arg.addend >= W:
+                    if self.arg >= Ordinal(0, 1, W, 2, 0):
+                        term = f'\psi_0({aslatex(self.arg)})'
+                    else:
+                        if self.arg == Ordinal(0, 1, W, 1, 0):
+                            term = '\zeta_0'
+                        else:
+                            x = self.arg.copy()
+                            x.addend = 0
+                            if self.arg.addend >= psi(0, Ordinal(self.arg.Isub, self.arg.sub, self.arg.arg,
+                                                                 self.arg.copies, 1)):
+                                if getaddend(self.arg) != 0:
+                                    term = f'\omega{{\\varepsilon_{{{aslatex(z0 + norm(divW(removeaddend(self.arg).addend)))}}}+{aslatex(getaddend(self.arg))}}}'
+                                else:
+                                    term = f'\\varepsilon_{{{aslatex(z0 + norm(divW(removeaddend(self.arg).addend)))}}}'
+                            else:
+                                term = f'\omega^{{{aslatex(psi(0, x) + self.arg.addend)}}}'
+                else:
+                    term = f'\psi_0({aslatex(self.arg)})'
+    else:
+        if self >= psi3(self.Isub, self.sub, psi3(self.Isub, self.sub, 1)):
+            if self.Isub>0:
+                term=f'\psi_{{{aslatex(self.Isub)},{aslatex(self.sub)}}}({aslatex(self.arg)})'
+            else:
+                term = f'\psi_{{{aslatex(self.sub)}}}({aslatex(self.arg)})'
+        else:
+            term = f'\omega^{{{aslatex(psi3(self.Isub, self.sub, 0) + self.arg)}}}'
+    if self.copies != 1:
+        term += f'\\cdot {self.copies}'
+    if self.addend != 0:
+        term += f'+{aslatex(self.addend)}'
+    term = term.replace('\psi_0(\psi_{1}(\omega^{\Omega\cdot2}))', '\Gamma_0')
+    term = term.replace('\Omega_{0,I}', '\Lambda')
+    return term
 w=Ordinal()
 W=omega(0,1)
 I=omega(1,0)
