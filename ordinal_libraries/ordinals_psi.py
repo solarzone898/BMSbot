@@ -1,7 +1,7 @@
 # Supports countable ordinals up to ψ₀(I(1,0))
 # Important: I_x+y is assumed to be {x,y}
 # I_x*(n+1) = I_x+I_x*n = {x,I_x*n}
-from functools import total_ordering # psi v1.5½
+from functools import total_ordering # psi v1.3½ patch ω
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
@@ -266,7 +266,7 @@ def aslatex(self):
         term += f'\\cdot {self.copies}'
     if self.addend != 0:
         term += f'+{aslatex(self.addend)}'
-    term = term.replace('\psi_0(\psi_{1}(\omega^{\Omega\cdot2}))', '\Gamma_0')
+    term = term.replace('\psi_0(\omega^{\omega^{\Omega\cdot2}})', '\Gamma_0')
     term = term.replace('\Omega_{0,I}', '\Lambda')
     return term
 w=Ordinal()
