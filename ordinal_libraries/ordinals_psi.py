@@ -1,7 +1,7 @@
 # Supports countable ordinals up to ψ₀(I(1,0))
 # Important: I_x+y is assumed to be {x,y}
 # I_x*(n+1) = I_x+I_x*n = {x,I_x*n}
-from functools import total_ordering # psi v1.5½ patch 1
+from functools import total_ordering # psi v1.5½ patch 3
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
@@ -21,7 +21,7 @@ class Ordinal:
                 if isinstance(self.sub, int):
                     term= 'Ω' +''.join(['₀₁₂₃₄₅₆₇₈₉'[int(i)] for i in str(self.sub)]) * (self.sub != 1) #ψ_α(0) = Ω_α
                 else:
-                    if omega(self.Isub,0)+self.sub>=omega(self.Isub+1,0):
+                    if omega(self.Isub,0)+self.sub<omega(self.Isub+1,0):
                         term= 'Ω_' +'{' * (self.sub != w) + str(self.sub) + '}' * (self.sub != w)
                     else:
                         term = 'Ω_' + '{0,' + str(self.sub) + '}'
@@ -32,7 +32,7 @@ class Ordinal:
                     else:
                         term = 'I_' + '{' * (self.Isub != w) + str(self.Isub) + '}' * (self.Isub != w)
                 else:
-                    if get_tuple_2(omega(self.Isub,0))<get_tuple_2(self.sub) and (self.Isub,self.sub)>=(0,I):
+                    if omega(self.Isub,0)+self.sub>=omega(self.Isub+1,0):
                         term=f'Ω_{{{str(self.Isub)+","+str(self.sub)}}}'
                     else:
                         term = f'Ω_{{{omega(self.Isub,0)+self.sub}}}'
@@ -114,7 +114,7 @@ class Ordinal:
                             else:
                                 term= f'ω^({psi(0,x)+self.arg.addend})'
         else:
-            if self.arg>omega(self.Isub,self.sub+1):
+            if self.arg>=psi3(self.Isub,self.sub,omega(self.Isub,self.sub+1)):
                 if isinstance(self.sub, int) and self.Isub==0:
                     term= 'ψ' +''.join(['₀₁₂₃₄₅₆₇₈₉'[int(i)] for i in str(self.sub)]) + '(' + str(self.arg) + ')'
                 else:
@@ -255,7 +255,7 @@ def aslatex(self):
                 else:
                     term = f'\psi_0({aslatex(self.arg)})'
     else:
-        if self.arg>omega(self.Isub,self.sub+1):
+        if self.arg>=psi3(self.Isub,self.sub,omega(self.Isub,self.sub+1)):
             if self.Isub>0:
                 term=f'\psi_{{{aslatex(self.Isub)},{aslatex(self.sub)}}}({aslatex(self.arg)})'
             else:
