@@ -1,7 +1,7 @@
 # Supports countable ordinals up to ψ₀(I(1,0))
 # Important: I_x+y is assumed to be {x,y}
 # I_x*(n+1) = I_x+I_x*n = {x,I_x*n}
-from functools import total_ordering # psi v1.5
+from functools import total_ordering # psi v1.5½
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
@@ -114,7 +114,7 @@ class Ordinal:
                             else:
                                 term= f'ω^({psi(0,x)+self.arg.addend})'
         else:
-            if self>=psi3(self.Isub,self.sub,psi3(self.Isub,self.sub,1)):
+            if self.arg>omega(self.Isub,self.sub+1):
                 if isinstance(self.sub, int) and self.Isub==0:
                     term= 'ψ' +''.join(['₀₁₂₃₄₅₆₇₈₉'[int(i)] for i in str(self.sub)]) + '(' + str(self.arg) + ')'
                 else:
@@ -123,7 +123,7 @@ class Ordinal:
                     else:
                         term = 'ψ_' + '{' * (omega(self.Isub, 0) + self.sub != w) + str(omega(self.Isub,0)+self.sub)+ '}' * (omega(self.Isub, 0) + self.sub != w) + '(' + str(self.arg) + ')'
             else:
-                term= f'ω^({psi3(self.Isub, self.sub, 0) + self.arg})'
+                term= f'ω^({psi3(self.Isub, self.sub, 0)+self.arg})'
         if self.copies!=1:
             term+=f'·{self.copies}'
         if self.addend!=0:
@@ -144,12 +144,7 @@ class Ordinal:
     def __add__(self,other):
         if isinstance(other,Ordinal):
             if (self.Isub,self.sub,self.arg)<(other.Isub,other.sub,other.arg):
-                k=other
-                if isinstance(self,Ordinal):
-                    k.addend=self+k.addend
-                else:
-                    k.addend=k.addend+self
-                return k
+                return other
             else:
                 if (self.Isub,self.sub,self.arg)==(other.Isub,other.sub,other.arg):
                     k=self.copy()
