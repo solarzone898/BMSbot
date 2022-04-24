@@ -21,7 +21,7 @@ class Ordinal:
                 if isinstance(self.sub, int):
                     term= 'Ω' +''.join(['₀₁₂₃₄₅₆₇₈₉'[int(i)] for i in str(self.sub)]) * (self.sub != 1) #ψ_α(0) = Ω_α
                 else:
-                    if self.sub.Isub==0 and self.sub<L:
+                    if omega(self.Isub,0)+self.sub>=omega(self.Isub+1,0):
                         term= 'Ω_' +'{' * (self.sub != w) + str(self.sub) + '}' * (self.sub != w)
                     else:
                         term = 'Ω_' + '{0,' + str(self.sub) + '}'
@@ -32,7 +32,7 @@ class Ordinal:
                     else:
                         term = 'I_' + '{' * (self.Isub != w) + str(self.Isub) + '}' * (self.Isub != w)
                 else:
-                    if omega(self.Isub,0)+self.sub>=omega(self.Isub+1,0):
+                    if get_tuple_2(omega(self.Isub,0))<get_tuple_2(self.sub) and (self.Isub,self.sub)>=(0,I):
                         term=f'Ω_{{{str(self.Isub)+","+str(self.sub)}}}'
                     else:
                         term = f'Ω_{{{omega(self.Isub,0)+self.sub}}}'
@@ -123,12 +123,12 @@ class Ordinal:
                     else:
                         term = 'ψ_' + '{' * (omega(self.Isub, 0) + self.sub != w) + str(omega(self.Isub,0)+self.sub)+ '}' * (omega(self.Isub, 0) + self.sub != w) + '(' + str(self.arg) + ')'
             else:
-                term= f'ω^({psi3(self.Isub, self.sub, 0)+self.arg})'
+                term= f'ω^({psi3(self.Isub, self.sub, 0) + self.arg})'
         if self.copies!=1:
             term+=f'·{self.copies}'
         if self.addend!=0:
             term+=f'+{self.addend}'
-        term=term.replace('ψ₀(ψ₁(ω^(Ω·2)))','Γ₀')
+        term=term.replace('ψ₀(ω^(ω^(Ω·2)))','Γ₀')
         term=term.replace('Ω_{0,I}','Λ')
         return term
     def as_tuple(self):
@@ -210,6 +210,65 @@ def norm(n):
     except:
         n = n
     return n
+def aslatex(self):
+    if type(self)==int:
+        return str(self)
+    term = ''
+    if self.arg == 0:
+        if self.Isub == 0:
+            if self.sub < L:
+                term = '\Omega' + ('_{' + aslatex(self.sub) + '}')*(self.sub>1)
+            else:
+                term = '\Omega' + '_{0,' + aslatex(self.sub) + '}'
+        elif self.Isub > 0:
+            if self.sub == 0:
+                term = 'I' + ('_{'+aslatex(self.Isub) + '}')*(self.Isub>1)
+            else:
+                term = f'\Omega_{{{aslatex(self.Isub) + "," + aslatex(self.sub)}}}'
+    elif self.sub == 0 and self.Isub == 0:
+        if self.arg < W:
+            if self.arg!=1:
+                term = f'\omega^{{{aslatex(self.arg)}}}'
+            else:
+                term = f'\omega'
+        else:
+            try:
+                divW(self.arg)
+                if self.arg < psi(1, W):
+                    x = divW(self.arg)  # epsilon index (dividing by Ω)
+                    try:
+                        x-=1
+                    except:
+                        pass
+                    term = f'\\varepsilon_{{{aslatex(x)}}}'
+                else:
+                    raise Exception('qwertyuiop')
+            except:
+                if self.arg.addend == 0 or self.arg.addend >= W:
+                    if self.arg >= Ordinal(0, 1, W, 2, 0):
+                        term = f'\psi_0({aslatex(self.arg)})'
+                    else:
+                        if self.arg == Ordinal(0, 1, W, 1, 0):
+                            term = '\zeta_0'
+                        else:
+                            term = f'\psi_0({aslatex(self.arg)})'
+                else:
+                    term = f'\psi_0({aslatex(self.arg)})'
+    else:
+        if self.arg>omega(self.Isub,self.sub+1):
+            if self.Isub>0:
+                term=f'\psi_{{{aslatex(self.Isub)},{aslatex(self.sub)}}}({aslatex(self.arg)})'
+            else:
+                term = f'\psi_{{{aslatex(self.sub)}}}({aslatex(self.arg)})'
+        else:
+            term = f'\omega^{{{aslatex(psi3(self.Isub, self.sub, 0) + self.arg)}}}'
+    if self.copies != 1:
+        term += f'\\cdot {self.copies}'
+    if self.addend != 0:
+        term += f'+{aslatex(self.addend)}'
+    term = term.replace('\psi_0(\psi_{1}(\omega^{\Omega\cdot2}))', '\Gamma_0')
+    term = term.replace('\Omega_{0,I}', '\Lambda')
+    return term
 w=Ordinal()
 W=omega(0,1)
 I=omega(1,0)
