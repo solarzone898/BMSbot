@@ -1,7 +1,7 @@
 # Supports countable ordinals up to ψ₀(I(1,0))
 # Important: I_x+y is assumed to be {x,y}
 # I_x*(n+1) = I_x+I_x*n = {x,I_x*n}
-from functools import total_ordering # psi v1.3½ patch ω
+from functools import total_ordering # psi v1.5½ patch 1
 @total_ordering
 class Ordinal:
     def __init__(self,I_subscript=0,subscript=0,arg=1,copies=1,addend=0):
