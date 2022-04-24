@@ -266,7 +266,7 @@ def aslatex(self):
         term += f'\\cdot {self.copies}'
     if self.addend != 0:
         term += f'+{aslatex(self.addend)}'
-    term = term.replace('\psi_0(\omega^{\omega^{\Omega\cdot2}})', '\Gamma_0')
+    term = term.replace('\psi_0(\omega^{\omega^{\Omega\cdot 2}})', '\Gamma_0')
     term = term.replace('\Omega_{0,I}', '\Lambda')
     return term
 w=Ordinal()
