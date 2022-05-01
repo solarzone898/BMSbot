@@ -3,7 +3,10 @@ from functools import total_ordering
 # derived from https://github.com/ajcr/transfinite/blob/master/transfinite/ordinal.py
 # most of the multiplication and exponentiation code is from https://reinhardt-c.github.io/VebleNum.js/
 # Goes up to Γ₀, for higher ordinals only addition is supported, in ordinals_psi.py
-@total_ordering
+from functools import total_ordering
+ 
+# derived from https://github.com/ajcr/transfinite/blob/master/transfinite/ordinal.py
+# most of the multiplication and exponentiation code is from https://reinhardt-c.github.io/VebleNum.js/
 def is_finite_ordinal(a):
     """
     Return True if n is a finite ordinal (non-negative int).
@@ -186,7 +189,8 @@ class Ordinal:
             return s**Ordinal(o.subscript,o.arg,o.copies)*s**o.addend
         if isProd(o):
             return s**Ordinal(o.subscript,o.arg)**o.copies
-        if o.veblen()[0]==0 and 1<((o.subscript,)*(o.subscript>0))[0]:
+        print(((o.subscript,)*(o.subscript>0)))
+        if o.veblen()[0]==0 and 1<((o.subscript,)*(o.subscript>0)+(o.arg,))[0]:
             if w<=((o.subscript,)*(o.subscript>0))[0]:
                 return Ordinal(0,o)
             k=o
@@ -230,7 +234,10 @@ def as_latex(a):
         if type(a)==float and 'e' in str(a):
             return str(a).split('e')[0]+'\\times 10^{'+str(a).split('e')[1].replace('+','')+'}'
         else:
-            return str(a)
+            if type(a)==complex:
+                return f'{as_latex(a.real)}{"+" if a.imag>=0 else ""}{as_latex(a.imag)}i'
+            else:
+                return f'\mathregular{{{a}}}'
     else:
         term=r'\varphi'
         if a.subscript<4:
